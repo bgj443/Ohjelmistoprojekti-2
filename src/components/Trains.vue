@@ -14,31 +14,26 @@
     </select>
     <template v-if="trains.length">
       <div v-for="(train, i) in trains" v-bind:key="i">
-        <span class="train-type">{{ train.trainType }}</span>
-        <span class="train-destination" v-if="train.timeTableRows.length">
-          {{
-            train.timeTableRows[train.timeTableRows.length - 1].stationShortCode
-          }}
-        </span>
-        <span class="train-track" v-if="train.timeTableRows.length">
-          {{
-            train.timeTableRows[train.timeTableRows.length - 1].commercialTrack
-          }}</span
-        >
-        <span class="train-schedule" v-if="train.timeTableRows.length">
-          {{
-            formatDate(
-              train.timeTableRows[train.timeTableRows.length - 1].scheduledTime
-            )
-          }}</span
-        >
-        <span class="train-schedule" v-if="train.timeTableRows.length">
-          {{
-            formatTime(
-              train.timeTableRows[train.timeTableRows.length - 1].scheduledTime
-            )
-          }}</span
-        >
+        <template v-if="findDeparture(train.timeTableRows)">
+          <span class="train-type">{{
+            train.commuterLineID ? train.commuterLineID : train.trainType
+          }}</span>
+          <span class="train-destination" v-if="train.timeTableRows.length">
+            {{
+              train.timeTableRows[train.timeTableRows.length - 1]
+                .stationShortCode
+            }}
+          </span>
+          <span class="train-track">
+            {{ findDeparture(train.timeTableRows).commercialTrack }}
+          </span>
+          <span class="train-schedule">
+            {{ formatDate(findDeparture(train.timeTableRows).scheduledTime) }}
+          </span>
+          <span class="train-schedule">
+            {{ formatTime(findDeparture(train.timeTableRows).scheduledTime) }}
+          </span>
+        </template>
       </div>
     </template>
   </div>
@@ -65,6 +60,13 @@ export default {
           (data) => (this.trains = data)
         );
       }
+    },
+    findDeparture(timetable) {
+      let departure = timetable.find(
+        (el) =>
+          el.stationShortCode == this.departureStation && el.type == "DEPARTURE"
+      );
+      return departure;
     },
     formatDate(value) {
       let formatted = new Date(value).toLocaleDateString("fi-fi");
