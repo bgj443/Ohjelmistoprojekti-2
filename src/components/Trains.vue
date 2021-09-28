@@ -71,7 +71,10 @@ export default {
       return formatted;
     },
     formatTime(value) {
-      let formatted = new Date(value).toLocaleTimeString("fi-fi");
+      let formatted = new Date(value).toLocaleTimeString("fi-fi", {
+        hour: "2-digit",
+        minute: "2-digit",
+      });
       return formatted;
     },
   },
