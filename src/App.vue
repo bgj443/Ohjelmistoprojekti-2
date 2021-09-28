@@ -2,7 +2,7 @@
   <v-app>
     <v-toolbar app>
       <v-toolbar-title class="headline text-uppercase">
-        <span>Train List</span>
+        <span>Valitse lähtöasema</span>
       </v-toolbar-title>
     </v-toolbar>
 

@@ -1,7 +1,7 @@
 <template>
   <div>
     <select v-model="departureStation" @change="refreshTrains">
-      <option selected disabled>Valitse lähtöasema</option>
+      <option selected disabled></option>
       <template v-for="(station, i) in stations">
         <option
           v-bind:key="'station' + i"
@@ -15,9 +15,30 @@
     <template v-if="trains.length">
       <div v-for="(train, i) in trains" v-bind:key="i">
         <span class="train-type">{{ train.trainType }}</span>
-        <span class="train-destination" v-if="train.timeTableRows.length">{{
-          train.timeTableRows[train.timeTableRows.length - 1].stationShortCode
-        }}</span>
+        <span class="train-destination" v-if="train.timeTableRows.length">
+          {{
+            train.timeTableRows[train.timeTableRows.length - 1].stationShortCode
+          }}
+        </span>
+        <span class="train-track" v-if="train.timeTableRows.length">
+          {{
+            train.timeTableRows[train.timeTableRows.length - 1].commercialTrack
+          }}</span
+        >
+        <span class="train-schedule" v-if="train.timeTableRows.length">
+          {{
+            formatDate(
+              train.timeTableRows[train.timeTableRows.length - 1].scheduledTime
+            )
+          }}</span
+        >
+        <span class="train-schedule" v-if="train.timeTableRows.length">
+          {{
+            formatTime(
+              train.timeTableRows[train.timeTableRows.length - 1].scheduledTime
+            )
+          }}</span
+        >
       </div>
     </template>
   </div>
@@ -34,10 +55,7 @@ export default {
       arrivalStation: "",
       trains: [],
       stations: [],
-      headers: [
-        { text: "Train number", align: "left", value: "trainNumber" },
-        { text: "Train type", align: "left", value: "trainType" },
-      ],
+      headers: [],
     };
   },
   methods: {
@@ -47,6 +65,14 @@ export default {
           (data) => (this.trains = data)
         );
       }
+    },
+    formatDate(value) {
+      let formatted = new Date(value).toLocaleDateString("fi-fi");
+      return formatted;
+    },
+    formatTime(value) {
+      let formatted = new Date(value).toLocaleTimeString("fi-fi");
+      return formatted;
     },
   },
   mounted() {
@@ -67,6 +93,24 @@ export default {
   line-height: 30px;
   font-weight: bold;
   text-align: center;
+  padding: 6px;
+}
+.train-destination {
+  color: black;
+  font-size: 16px;
+  font-weight: bold;
+  padding: 6px;
+}
+.train-track {
+  color: black;
+  font-size: 16px;
+  font-weight: bold;
+  padding: 6px;
+}
+.train-schedule {
+  color: black;
+  font-size: 16px;
+  font-weight: bold;
   padding: 6px;
 }
 </style>
