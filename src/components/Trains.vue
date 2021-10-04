@@ -16,12 +16,12 @@
       <div v-for="(train, i) in trains" v-bind:key="i">
         <template v-if="findDeparture(train.timeTableRows)">
           <span class="train-type">{{
-            train.commuterLineID ? train.commuterLineID : train.trainType
+            train.commuterLineID ? train.commuterLineID : train.trainType + train.trainNumber
           }}</span>
           <span class="train-destination" v-if="train.timeTableRows.length">
             {{
               train.timeTableRows[train.timeTableRows.length - 1]
-                .stationShortCode
+                .stationShortCode 
             }}
           </span>
           <span class="train-track">
@@ -42,6 +42,7 @@
 <script>
 import getTrainsByStation from "../services/getTrainsByStation";
 import getStations from "../services/getStations";
+
 
 export default {
   data() {
