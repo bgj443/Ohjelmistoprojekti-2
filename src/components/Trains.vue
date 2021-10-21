@@ -45,8 +45,8 @@
           }}</span>
           <span class="train-destination" v-if="train.timeTableRows.length">
             {{
-              train.timeTableRows[train.timeTableRows.length - 1]
-                .stationShortCode
+              findStationName(train.timeTableRows[train.timeTableRows.length - 1]
+                .stationShortCode)
             }}
           </span>
           <span class="train-track">
@@ -72,7 +72,6 @@
 import getTrainsByStation from "../services/getTrainsByStation";
 import getStations from "../services/getStations";
 import Compositions from "./Compositions";
-
 export default {
   components: {
     Compositions,
@@ -82,7 +81,7 @@ export default {
       departureStation: "",
       arrivalStation: "",
       trains: [],
-      stations: [],
+      stations: ["stationShortCode", "stationName"],
       headers: [],
       trainCategories: ["Commuter", "Long-distance"],
     };
@@ -126,10 +125,18 @@ export default {
       });
       return formatted;
     },
+    findStationName(stationShort) {
+      let stationName = this.stations.find(
+        (el) =>
+          el.stationShortCode == stationShort
+      );
+      return stationName.stationName.split(" ")[0];
+  },
   },
   mounted() {
     getStations().then((data) => (this.stations = data));
   },
+  
 };
 </script>
 
