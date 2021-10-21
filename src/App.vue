@@ -8,16 +8,19 @@
 
     <v-content>
       <Trains />
+      <DatePicker />
     </v-content>
   </v-app>
 </template>
 
 <script>
 import Trains from "./components/Trains";
+import DatePicker from "./components/DatePicker";
 
 export default {
   name: "App",
   components: {
+    DatePicker,
     Trains,
   },
   data() {
